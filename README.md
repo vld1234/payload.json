@@ -1,2 +1,92 @@
 # payload.json
 Gitlab CI notifcation
+
+###
+{
+    "type": "message",
+    "attachments": [
+        {
+            "contentType": "application/vnd.microsoft.card.adaptive",
+            "contentUrl": null,
+            "content": {
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "type": "AdaptiveCard",
+                "version": "1.5",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "size": "Medium",
+                        "weight": "Bolder",
+                        "text": "GitLab Project aos_cloud"
+                    },
+                    {
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "items": [
+                                    {
+                                        "type": "Image",
+                                        "style": "Person",
+                                        "url": "https://virtualhobbit.com/wp-content/uploads/2020/04/20200423-1.png",
+                                        "size": "Large"
+                                    }
+                                ],
+                                "width": "auto"
+                            },
+                            {
+                                "type": "Column",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "spacing": "None",
+                                        "text": "**REPOSITORY**: $CI_PROJECT_NAME",
+                                        "isSubtle": true,
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "spacing": "None",
+                                        "text": "**TIMESTAMP**: $CI_COMMIT_TIMESTAMP",
+                                        "isSubtle": true,
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "spacing": "None",
+                                        "text": "**Author**: $GITLAB_USER_NAME",
+                                        "isSubtle": true,
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "spacing": "None",
+                                        "text": "**LATEST_TAG**: $LATEST_TAG",
+                                        "isSubtle": true,
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "spacing": "None",
+                                        "text": "**PIPELINE**: [View Pipeline #${CI_PIPELINE_ID}]($CI_PIPELINE_URL)",
+                                        "isSubtle": false,
+                                        "wrap": true,
+                                        "color": "default"
+                                    }
+                                ],
+                                "width": "stretch"
+                            }
+                        ]
+                    }
+
+                ]
+
+            }
+        }
+    ]
+}
+
+cat << EOF > payload.json
+{}
+EOF
+curl -H "Content-Type:application/json" -d @payload.json "$TEAMS_WEBHOOK_URL"
