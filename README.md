@@ -6,6 +6,7 @@ Gitlab CI notifcation
   variables:
     TEAMS_WEBHOOK_URL: "$TEAMS_WEBHOOK_URL"
   script:
+    - apk add --no-cache curl bash jq
     - |
         cat << EOF > payload.json
         {}
@@ -13,25 +14,37 @@ Gitlab CI notifcation
         curl -H "Content-Type:application/json" -d @payload.json "$TEAMS_WEBHOOK_URL"
 
 teams_notification_when_pipeline_failed:
-  stage: notify_on_teams
+  stage: notify_results
   needs:
-    - job: latest_release-tag
+    - job: deploy_stage_aws
+      optional: true
+    - job: tag
+      artifacts: true
+      optional: true
   extends:
-    - .notification_template
+    - .pipeline_workflow
   rules:
-    - when: on_failure
-      if: "$CI_COMMIT_TAG"
-      variables:
-        STATUS: "failed"
-        ICON: "❌"
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: on_failure
+    - when: never
+  variables:
+    STATUS: "failed"
+    ICON: "❌"
 
 teams_notification_when_pipeline_succeed:
-  stage: notify_on_teams
+  stage: notify_results
+  needs:
+    - job: deploy_stage_aws
+      optional: true
+    - job: tag
+      artifacts: true
+      optional: true
   extends:
-    - .notification_template
+    - .pipeline_workflow
   rules:
-    - when: on_success
-      if: "$CI_COMMIT_TAG"
-      variables:
-        STATUS: "success"
-        ICON: "✅"
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: on_success
+    - when: never
+  variables:
+    STATUS: "success"
+    ICON: "✅"
