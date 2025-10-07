@@ -36,7 +36,7 @@
                                     {
                                         "type": "TextBlock",
                                         "spacing": "None",
-                                        "text": "**REPOSITORY**: [aos_cloud]($CI_PROJECT_URL)",
+                                        "text": "**REPOSITORY**: [cloud]($CI_PROJECT_URL)",
                                         "isSubtle": true,
                                         "wrap": true
                                     },
