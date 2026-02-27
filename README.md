@@ -1,6 +1,6 @@
 # payload.json
 Gitlab CI notifcation
-
+```
 ###
 .notification_template:
   variables:
@@ -48,3 +48,4 @@ teams_notification_when_pipeline_succeed:
   variables:
     STATUS: "success"
     ICON: "✅"
+```
